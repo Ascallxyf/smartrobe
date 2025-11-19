@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>我的衣橱 - 智能穿搭推荐平台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="container">
+      <a href="index.html" class="brand">SmartWardrobe</a>
+      <nav class="nav-links">
+        <a href="index.html">首页</a>
+        <a href="wardrobe.html" class="active">我的衣橱</a>
+        <a href="recommendations.html">搭配推荐</a>
+        <a href="profile.html">个人资料</a>
+      </nav>
+      <div class="action-group">
+        <button id="login-btn" class="btn btn-secondary">登录</button>
+        <button id="logout-btn" class="btn btn-ghost">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container">
+      <div class="section-header">
+        <h2>我的衣橱</h2>
+        <p class="section-subtitle">基于SegFormer语义分割的智能服装分类管理系统</p>
+      </div>
+      
+      <!-- 衣橱统计 -->
+      <div class="wardrobe-stats" id="wardrobe-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="total-items">0</div>
+          <div class="stat-label">衣服总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="total-categories">0</div>
+          <div class="stat-label">分类数量</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="total-colors">0</div>
+          <div class="stat-label">色彩种类</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">AI</div>
+          <div class="stat-label">智能识别</div>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <button id="upload-btn" class="btn btn-primary btn-large">📷 上传新衣服</button>
+      </div>
+      
+      <!-- 上传区域 -->
+      <div id="upload-area" class="upload-area hidden">
+        <div class="upload-card">
+          <input type="file" id="image-upload" accept="image/*" style="display:none">
+          <div class="upload-placeholder" id="upload-placeholder">
+            <div class="upload-icon">📷</div>
+            <p>点击或拖拽图片到此处</p>
+            <p class="upload-hint">支持 JPG、PNG 格式</p>
+          </div>
+          <div id="preview-area" class="hidden">
+            <img id="preview-image" alt="预览">
+            <div class="upload-actions">
+              <button id="confirm-upload" class="btn btn-primary">确认上传</button>
+              <button id="cancel-upload" class="btn btn-ghost">取消</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 分类标签 -->
+      <div class="category-tabs" id="category-tabs">
+        <button class="category-tab active" data-group="all">全部</button>
+        <button class="category-tab" data-group="tops">上衣</button>
+        <button class="category-tab" data-group="outerwear">外套</button>
+        <button class="category-tab" data-group="bottoms">下装</button>
+        <button class="category-tab" data-group="dresses">连衣裙</button>
+        <button class="category-tab" data-group="others">其他</button>
+      </div>
+      
+      <div class="wardrobe-grid" id="wardrobe-grid"></div>
+    </section>
+  </main>
+
+  <!-- 登录模态框 -->
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-overlay" data-dismiss="modal"></div>
+    <div class="modal-content">
+      <button class="modal-close" data-dismiss="modal">×</button>
+      <h2>账号登录</h2>
+      <p class="modal-subtitle">输入平台账号密码即可同步衣橱与推荐。</p>
+      <form id="login-form">
+        <label class="input-field">
+          <span>用户名</span>
+          <input type="text" name="username" required>
+        </label>
+        <label class="input-field">
+          <span>密码</span>
+          <input type="password" name="password" required>
+        </label>
+        <p id="login-message" class="error-message"></p>
+        <button type="submit" class="btn btn-primary">登录</button>
+        <p class="modal-footer">还没有账号？<a href="/accounts/register/">立即注册</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="wardrobe.js?v=9"></script>
+</body>
+</html>

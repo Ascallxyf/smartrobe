@@ -1,0 +1,360 @@
+================================================================================
+                    智能穿搭推荐平台 - 更新日志
+                   Fashion Recommendation Platform
+================================================================================
+
+项目名称: 智能穿搭推荐平台
+版本: v2.0
+更新日期: 2025-11-11
+维护者: 开发团队
+
+================================================================================
+                              版本 v2.0
+                         重大架构重构版本
+                           2025-11-11
+================================================================================
+
+【重大变更】前后端分离架构
+
+本次更新对项目进行了彻底的架构重构，实现了清晰的前后端分离。
+
+--------------------------------------------------------------------------------
+新增功能
+--------------------------------------------------------------------------------
+
+1. 前后端分离架构
+   - 新增 frontend/ 目录存放所有前端资源
+     * templates/ - HTML 模板文件
+     * static/css/ - 样式文件
+     * static/js/ - JavaScript 文件
+     * static/images/ - 图片资源
+     * static/uploads/ - 用户上传文件
+
+   - 新增 backend/ 目录存放所有后端代码
+     * api/ - REST API 蓝图（认证、衣橱、推荐、用户）
+     * models/ - 数据库模型
+     * services/ - 业务逻辑服务
+     * config/ - 多环境配置
+     * repositories/ - 数据访问层（预留）
+     * utils/ - 工具函数（预留）
+
+2. API 蓝图模块化
+   - backend/api/auth.py - 认证相关 API
+     * POST /api/auth/register - 用户注册
+     * POST /api/auth/login - 用户登录
+     * POST /api/auth/logout - 用户登出
+     * GET /api/auth/me - 获取当前用户信息
+
+   - backend/api/wardrobe.py - 衣橱管理 API
+     * GET /api/wardrobe/items - 获取衣物列表
+     * POST /api/wardrobe/items - 添加衣物
+     * PUT /api/wardrobe/items/:id - 更新衣物
+     * DELETE /api/wardrobe/items/:id - 删除衣物
+
+   - backend/api/recommendation.py - 推荐服务 API
+     * POST /api/recommend/outfit - 获取穿搭推荐
+     * POST /api/recommend/style - 风格分析
+     * GET /api/recommend/history - 推荐历史
+
+   - backend/api/user.py - 用户画像 API
+     * GET /api/user/profile - 获取用户画像
+     * PUT /api/user/profile - 更新用户画像
+
+3. 配置管理优化
+   - 多环境配置支持
+     * DevelopmentConfig - 开发环境配置
+     * ProductionConfig - 生产环境配置
+     * TestingConfig - 测试环境配置
+   - 支持环境变量配置
+   - 统一配置管理
+
+4. 应用工厂模式
+   - 实现 Flask 应用工厂模式
+   - 支持根据环境动态创建应用实例
+   - 便于单元测试和多环境部署
+
+5. 前端资源文件
+   - frontend/static/css/style.css - 全局样式文件
+     * 响应式布局
+     * 统一的颜色主题
+     * 按钮、卡片、表单等组件样式
+   
+   - frontend/static/js/main.js - 前端交互逻辑
+     * API 请求封装
+     * 衣橱管理类
+     * 推荐服务类
+     * 用户画像管理类
+     * 通知提示工具
+
+6. 新的主入口文件
+   - main.py - 统一应用入口
+     * 支持环境变量配置
+     * 美化启动信息显示
+     * 多环境切换支持
+
+7. 数据库初始化
+   - init_db.py - 数据库初始化脚本
+     * 自动创建所有数据表
+     * 创建演示账号 (demo/demo123)
+     * 创建默认用户画像
+
+8. Docker 支持
+   - Dockerfile - 容器化部署配置
+     * 基于 Python 3.11-slim
+     * 多阶段构建优化
+     * 健康检查支持
+     * 自动创建上传目录
+
+--------------------------------------------------------------------------------
+优化改进
+--------------------------------------------------------------------------------
+
+1. 代码结构优化
+   - 原 app.py (419行) 拆分为多个模块
+   - API 路由按功能分组到不同蓝图
+   - 业务逻辑与路由分离
+   - 代码可读性和可维护性大幅提升
+
+2. 项目组织
+   - 清晰的目录结构
+   - 职责单一的模块
+   - 易于团队协作
+   - 便于功能扩展
+
+3. 部署优化
+   - 支持 Docker 容器化部署
+   - 支持多环境配置
+   - 生产环境优化配置
+
+4. 开发体验
+   - 前后端可独立开发
+   - 热重载支持
+   - 清晰的错误提示
+   - 完善的日志记录
+
+--------------------------------------------------------------------------------
+增量更新：ApiX 模块统一封装（2025-11-15）
+--------------------------------------------------------------------------------
+
+1. 响应封装（backend/libs/apix/responses.py）
+   - 恢复国际化消息目录，并支持 `register_messages` 运行时扩展。
+   - 成功/失败响应自动附带语言、trace_id、UTC 时间戳等 `meta` 信息。
+   - 新增 `ApiXError`、`ValidationException` 及 `build_response`，将常见异常自动映射为统一结构。
+   - 在 `APIX_DEBUG` 或 `X-Debug-Mode: apix` 启用时附带调试字段（查询参数、异常摘要等）。
+   - 提供 `forbidden`、`throttled` 等常用错误响应，复用性更高。
+
+2. 数据验证（backend/libs/apix/schemas.py）
+   - `ValidationResult` 支持 warning、`raise_for_errors()` 与统一异常抛出。
+   - 通过 `_require_field`、`_validate_enum`、`_validate_list` 等辅助函数减少重复逻辑。
+   - 对衣橱、画像、推荐上下文字段进行更严格的长度/枚举校验，并与前端字段保持一致。
+
+3. 全局异常处理（backend/libs/apix/error_handlers.py）
+   - 统一处理 `ApiXError`、HTTP 404/401/403/429、SQLAlchemy、PermissionError 等场景。
+   - 保留数据库错误日志与服务器通用错误响应，确保可观察性。
+
+4. 测试与导出
+   - `backend/libs/apix/test_apix.py` 新增国际化注册、调试字段、限流响应与 `ValidationResult.raise_for_errors()` 等用例。
+   - `backend/libs/apix/__init__.py` 导出新的响应工具、异常类与辅助函数，方便业务层引用。
+
+5. 验证
+   - `python backend/libs/apix/test_apix.py`
+   - `python -m compileall backend/libs/apix`
+
+--------------------------------------------------------------------------------
+文件变更
+--------------------------------------------------------------------------------
+
+【新增文件】
++ frontend/templates/index.html - 主页模板（从 templates/ 迁移）
++ frontend/templates/dashboard.html - 仪表板模板（从 templates/ 迁移）
++ frontend/static/css/style.css - 全局样式文件
++ frontend/static/js/main.js - 前端逻辑文件
++ frontend/static/README.md - 静态资源说明
++ frontend/static/uploads/.gitkeep - 上传目录占位
+
++ backend/app.py - Flask 应用工厂
++ backend/__init__.py - 后端模块初始化
++ backend/config/config.py - 配置文件
++ backend/config/__init__.py - 配置模块初始化
++ backend/models/database.py - 数据模型（从 models.py 迁移）
++ backend/models/__init__.py - 模型模块初始化
++ backend/services/recommendation_engine.py - 推荐引擎（迁移）
++ backend/services/style_analyzer.py - 风格分析（迁移）
++ backend/services/user_profiler.py - 用户画像（迁移）
++ backend/services/__init__.py - 服务模块初始化
++ backend/api/__init__.py - API 蓝图注册
++ backend/api/auth.py - 认证 API
++ backend/api/wardrobe.py - 衣橱管理 API
++ backend/api/recommendation.py - 推荐服务 API
++ backend/api/user.py - 用户画像 API
+
++ main.py - 应用主入口
++ init_db.py - 数据库初始化脚本
++ Dockerfile - Docker 配置文件
++ CHANGELOG.txt - 本更新日志
+
+【删除文件】
+- app.py - 已重构为 backend/app.py
+- models.py - 已迁移到 backend/models/database.py
+- config.py - 已迁移到 backend/config/config.py
+- recommendation_engine.py - 已迁移到 backend/services/
+- style_analyzer.py - 已迁移到 backend/services/
+- user_profiler.py - 已迁移到 backend/services/
+- run.py - 已由 main.py 替代
+- setup-dev-environment.py - 已移除
+- test_suite.py - 测试文件已移除
+- verify_structure.py - 临时验证工具已移除
+
+【删除目录】
+- templates/ - 已迁移到 frontend/templates/
+- core/ - 模块化协作草案，已清理
+- tests/ - 测试文件已清理
+- scripts/ - 脚本已清理
+- docs/ - 临时文档已清理
+
+【删除文档】
+- RESTRUCTURE.md - 临时重构说明文档
+- REFACTOR_SUMMARY.md - 临时总结文档
+- ARCHITECTURE_COMPARISON.md - 临时架构对比文档
+- 重构完成报告.md - 临时完成报告
+- QUICKSTART.md - 快速开始指南（信息已整合到 README.md）
+
+--------------------------------------------------------------------------------
+兼容性说明
+--------------------------------------------------------------------------------
+
+【API 变更】
+- 路由前缀变更：
+  * /api/user/register -> /api/auth/register
+  * /api/user/login -> /api/auth/login
+  * /api/user/logout -> /api/auth/logout
+  * 其他 API 路径保持不变
+
+【导入路径变更】
+旧方式：
+  from models import User, ClothingItem
+  from recommendation_engine import RecommendationEngine
+
+新方式：
+  from backend.models import User, ClothingItem
+  from backend.services import RecommendationEngine
+
+【配置变更】
+- 上传目录从 static/uploads 改为 frontend/static/uploads
+- 模板目录从 templates 改为 frontend/templates
+- 静态文件目录从 static 改为 frontend/static
+
+【启动方式变更】
+旧方式：
+  python app.py
+
+新方式：
+  python main.py
+
+或使用便捷脚本：
+  python start.py
+
+--------------------------------------------------------------------------------
+升级指南
+--------------------------------------------------------------------------------
+
+1. 环境准备
+   # 激活虚拟环境
+   .\.venv\Scripts\Activate.ps1
+   
+   # 安装依赖（如有更新）
+   pip install -r requirements.txt
+
+2. 数据库初始化
+   # 重新初始化数据库（会清空现有数据）
+   python init_db.py
+   
+   注意：如需保留现有数据，请先备份数据库文件
+
+3. 启动应用
+   # 使用新的主入口启动
+   python main.py
+   
+   # 或使用便捷脚本
+   python start.py
+
+4. 访问应用
+   浏览器访问: http://localhost:5000
+   默认账号: demo / demo123
+
+--------------------------------------------------------------------------------
+环境变量配置
+--------------------------------------------------------------------------------
+
+可选的环境变量配置（创建 .env 文件）：
+
+FLASK_CONFIG=development      # 环境: development/production/testing
+FLASK_HOST=0.0.0.0           # 主机地址
+FLASK_PORT=5000              # 端口号
+FLASK_DEBUG=True             # 调试模式
+SECRET_KEY=your-secret-key   # 密钥（生产环境务必修改）
+DATABASE_URL=sqlite:///wardrobe.db  # 数据库 URL
+
+--------------------------------------------------------------------------------
+已知问题
+--------------------------------------------------------------------------------
+
+无
+
+--------------------------------------------------------------------------------
+后续计划
+--------------------------------------------------------------------------------
+
+1. 短期（1-2周）
+   - 补充 API 单元测试
+   - 集成 Swagger 自动生成 API 文档
+   - 前端引入构建工具（Webpack/Vite）
+
+2. 中期（1个月）
+   - 引入 Redis 缓存层
+   - 使用 Celery 处理异步任务
+   - 前端升级为 SPA（Vue.js/React）
+   - 数据库迁移到 PostgreSQL
+
+3. 长期（3个月+）
+   - 微服务架构拆分
+   - Kubernetes 容器编排
+   - GraphQL API
+   - 性能监控与日志分析系统
+
+================================================================================
+                           版本 v1.0 及更早
+                           2025-11-01
+================================================================================
+
+【初始版本】
+- 基础的智能穿搭推荐功能
+- 用户管理和认证系统
+- 智能衣橱管理
+- 推荐引擎核心算法
+- 风格分析功能
+- 用户画像构建
+
+详细功能请参考 README.md
+
+================================================================================
+                              技术支持
+================================================================================
+
+如遇问题，请查阅：
+- README.md - 项目总览和使用说明
+- requirements.txt - 依赖列表
+- Dockerfile - 容器化部署配置
+
+或通过项目仓库提交 Issue。
+
+================================================================================
+                            版权与许可
+================================================================================
+
+版权所有 © 2025 智能穿搭推荐平台开发团队
+保留所有权利。
+
+================================================================================
+                            文档结束
+================================================================================

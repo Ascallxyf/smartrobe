@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>智能穿搭推荐平台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="container">
+      <a href="index.html" class="brand">SmartWardrobe</a>
+      <nav class="nav-links">
+        <a href="index.html" class="active">首页</a>
+        <a href="wardrobe.html">我的衣橱</a>
+        <a href="recommendations.html">搭配推荐</a>
+        <a href="profile.html">个人资料</a>
+      </nav>
+      <div class="action-group">
+        <button id="login-btn" class="btn btn-secondary">登录</button>
+        <button id="logout-btn" class="btn btn-ghost">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 欢迎区域 -->
+    <section class="hero-section">
+      <div class="container">
+        <h1 class="hero-title">智能穿搭推荐平台</h1>
+        <p class="hero-subtitle">基于个体特征的AI智能衣橱系统</p>
+        <p class="hero-description">运用语义分割、色彩分析与体型识别技术，为你提供专业的个性化穿搭方案</p>
+        <div class="hero-actions">
+          <a href="wardrobe.html" class="btn btn-primary btn-large">开始使用</a>
+          <a href="profile.html" class="btn btn-secondary btn-large">设置资料</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 功能模块导航 -->
+    <section class="section container">
+      <div class="section-header">
+        <h2>平台功能</h2>
+        <p class="section-subtitle">四大核心模块，打造专属智能衣橱</p>
+      </div>
+      <div class="features-grid">
+        <a href="wardrobe.html" class="feature-card">
+          <div class="feature-icon">👔</div>
+          <h3>我的衣橱</h3>
+          <p>智能管理你的服装单品<br>自动识别分类与色彩提取</p>
+          <span class="feature-link">进入衣橱 →</span>
+        </a>
+        
+        <a href="recommendations.html" class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>搭配推荐</h3>
+          <p>AI生成个性化穿搭方案<br>适配体型、色彩与场合</p>
+          <span class="feature-link">查看推荐 →</span>
+        </a>
+        
+        <a href="profile.html" class="feature-card">
+          <div class="feature-icon">👤</div>
+          <h3>个人资料</h3>
+          <p>设置体型、肤色季型等信息<br>优化推荐精准度</p>
+          <span class="feature-link">编辑资料 →</span>
+        </a>
+        
+        <a href="profile.html#new-arrivals" class="feature-card">
+          <div class="feature-icon">🛍️</div>
+          <h3>新品精选</h3>
+          <p>当季必备单品推荐<br>极简美学灵感</p>
+          <span class="feature-link">浏览新品 →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 平台特色 -->
+    <section class="section section-light">
+      <div class="container">
+        <div class="section-header">
+          <h2>核心技术</h2>
+          <p class="section-subtitle">基于计算机视觉与深度学习的智能分析</p>
+        </div>
+        <div class="tech-grid">
+          <div class="tech-item">
+            <div class="tech-icon">🎨</div>
+            <h3>SegFormer语义分割</h3>
+            <p>精准识别服装轮廓与细节，实现高精度分类</p>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🌈</div>
+            <h3>色彩季型分析</h3>
+            <p>基于四季色彩理论，匹配最适合的服装颜色</p>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">📐</div>
+            <h3>体型适配算法</h3>
+            <p>针对H/A/X/V/O五种体型，提供专业搭配建议</p>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🤖</div>
+            <h3>智能推荐引擎</h3>
+            <p>综合多维度特征，生成个性化穿搭方案</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 快速开始 -->
+    <section class="section container">
+      <div class="cta-banner">
+        <h2>立即开启你的智能穿搭之旅</h2>
+        <p>三步快速上手：注册账号 → 上传衣服 → 获取推荐</p>
+        <div class="cta-actions">
+          <a href="/accounts/register/" class="btn btn-primary btn-large">注册账号</a>
+          <button id="cta-login-btn" class="btn btn-ghost btn-large">已有账号？登录</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 SmartWardrobe | 基于个体特征的智能穿搭推荐系统</p>
+      <p class="footer-tech">Powered by Django · SegFormer · Computer Vision</p>
+    </div>
+  </footer>
+
+  <!-- 登录模态框 -->
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-overlay" data-dismiss="modal"></div>
+    <div class="modal-content">
+      <button class="modal-close" data-dismiss="modal">×</button>
+      <h2>账号登录</h2>
+      <p class="modal-subtitle">输入平台账号密码即可同步衣橱与推荐。</p>
+      <form id="login-form">
+        <label class="input-field">
+          <span>用户名</span>
+          <input type="text" name="username" required>
+        </label>
+        <label class="input-field">
+          <span>密码</span>
+          <input type="password" name="password" required>
+        </label>
+        <p id="login-message" class="error-message"></p>
+        <button type="submit" class="btn btn-primary">登录</button>
+        <p class="modal-footer">还没有账号？<a href="/accounts/register/">立即注册</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="home.js?v=6"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>个人资料 - 智能穿搭推荐平台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="container">
+      <a href="index.html" class="brand">SmartWardrobe</a>
+      <nav class="nav-links">
+        <a href="index.html">首页</a>
+        <a href="wardrobe.html">我的衣橱</a>
+        <a href="recommendations.html">搭配推荐</a>
+        <a href="profile.html" class="active">个人资料</a>
+      </nav>
+      <div class="action-group">
+        <button id="login-btn" class="btn btn-secondary">登录</button>
+        <button id="logout-btn" class="btn btn-ghost">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container">
+      <div class="section-header">
+        <h2>我的专属档案</h2>
+        <p class="section-subtitle">我们基于以下特征为你定制推荐</p>
+      </div>
+      <div class="profile-card" id="user"></div>
+    </section>
+
+    <section class="section section-light">
+      <div class="container">
+        <div class="section-header">
+          <h2>新品精选</h2>
+          <p class="section-subtitle">当季必备单品，灵感来自优衣库简洁美学</p>
+        </div>
+        <div class="product-grid" id="new-arrivals-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 登录模态框 -->
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-overlay" data-dismiss="modal"></div>
+    <div class="modal-content">
+      <button class="modal-close" data-dismiss="modal">×</button>
+      <h2>账号登录</h2>
+      <p class="modal-subtitle">输入平台账号密码即可同步衣橱与推荐。</p>
+      <form id="login-form">
+        <label class="input-field">
+          <span>用户名</span>
+          <input type="text" name="username" required>
+        </label>
+        <label class="input-field">
+          <span>密码</span>
+          <input type="password" name="password" required>
+        </label>
+        <p id="login-message" class="error-message"></p>
+        <button type="submit" class="btn btn-primary">登录</button>
+        <p class="modal-footer">还没有账号？<a href="/accounts/register/">立即注册</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="profile.js?v=6"></script>
+</body>
+</html>
